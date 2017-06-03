@@ -100,8 +100,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         public void onItemSelected(Uri dateUri);
     }
 
-    public ForecastFragment() {
-    }
+    public ForecastFragment() {}
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
