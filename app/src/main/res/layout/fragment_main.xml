@@ -16,6 +16,6 @@
         android:layout_height="wrap_content"
         android:gravity="center_horizontal"
         android:padding="16dp"
-        android:text="@string/forecast_empty_message"
-        android:textSize="22sp" />
+        android:text="@string/empty_forecast_list"
+        android:textSize="20sp" />
 </FrameLayout>

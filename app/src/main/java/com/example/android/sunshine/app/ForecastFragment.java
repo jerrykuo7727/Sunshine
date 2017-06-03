@@ -260,23 +260,12 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         mForecastAdapter.swapCursor(data);
-        Log.d("onLoadFinished: ", "im here");
-        if (data == null || data.getCount() < 1) {
-            FragmentActivity activity = getActivity();
-            ConnectivityManager CM = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
-            NetworkInfo network = CM.getActiveNetworkInfo();
-            if (network == null || !network.isConnected()) {
-                TextView forecastEmptyView = (TextView) activity.findViewById(R.id.forecast_empty_view);
-                String message = getString(R.string.forecast_empty_message) + "\n" +
-                        getString(R.string.network_unavailable_message);
-                forecastEmptyView.setText(message);
-            }
-        }
         if (mPosition != ListView.INVALID_POSITION) {
             // If we don't need to restart the loader, and there's a desired position to restore
             // to, do so now.
             mListView.smoothScrollToPosition(mPosition);
         }
+        updateEmptyView();
     }
 
     @Override
@@ -288,6 +277,17 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         mUseTodayLayout = useTodayLayout;
         if (mForecastAdapter != null) {
             mForecastAdapter.setUseTodayLayout(mUseTodayLayout);
+        }
+    }
+
+    private void updateEmptyView() {
+        if (mForecastAdapter.getCount() == 0) {
+            TextView tv = (TextView) getActivity().findViewById(R.id.forecast_empty_view);
+            int messageId = R.string.empty_forecast_list;
+            if (Utility.isNetworkAvailable(getActivity())) {
+                messageId = R.string.empty_forecast_list_no_network;
+            }
+            tv.setText(messageId);
         }
     }
 }
