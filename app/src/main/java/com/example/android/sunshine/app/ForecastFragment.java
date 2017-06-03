@@ -284,7 +284,7 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
         if (mForecastAdapter.getCount() == 0) {
             TextView tv = (TextView) getActivity().findViewById(R.id.forecast_empty_view);
             int messageId = R.string.empty_forecast_list;
-            if (Utility.isNetworkAvailable(getActivity())) {
+            if (!Utility.isNetworkAvailable(getActivity())) {
                 messageId = R.string.empty_forecast_list_no_network;
             }
             tv.setText(messageId);
