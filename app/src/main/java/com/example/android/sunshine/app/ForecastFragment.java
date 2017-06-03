@@ -15,11 +15,16 @@
  */
 package com.example.android.sunshine.app;
 
+import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.net.ConnectivityManager;
+import android.net.Network;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
 import android.support.v4.content.Loader;
@@ -255,6 +260,18 @@ public class ForecastFragment extends Fragment implements LoaderManager.LoaderCa
     @Override
     public void onLoadFinished(Loader<Cursor> loader, Cursor data) {
         mForecastAdapter.swapCursor(data);
+        Log.d("onLoadFinished: ", "im here");
+        if (data == null || data.getCount() < 1) {
+            FragmentActivity activity = getActivity();
+            ConnectivityManager CM = (ConnectivityManager) activity.getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo network = CM.getActiveNetworkInfo();
+            if (network == null || !network.isConnected()) {
+                TextView forecastEmptyView = (TextView) activity.findViewById(R.id.forecast_empty_view);
+                String message = getString(R.string.forecast_empty_message) + "\n" +
+                        getString(R.string.network_unavailable_message);
+                forecastEmptyView.setText(message);
+            }
+        }
         if (mPosition != ListView.INVALID_POSITION) {
             // If we don't need to restart the loader, and there's a desired position to restore
             // to, do so now.
